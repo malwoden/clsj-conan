@@ -4,9 +4,9 @@ from conans import ConanFile, CMake, tools
 class ClsjConan(ConanFile):
     name = "clsj"
     version = "0.1"
-    license = "<Put the package license here>"
-    url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of Clsj here>"
+    license = "MIT"
+    url = "https://github.com/malwoden/clsj-conan"
+    description = "clsj is a toy package for testing c++, swig, java and conan togther"
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
 
