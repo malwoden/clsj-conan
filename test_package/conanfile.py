@@ -20,5 +20,6 @@ class ClsjTestConan(ConanFile):
 
     def test(self):
         if not tools.cross_building(self.settings):
-            os.chdir("bin")
-            self.run(".%sexample" % os.sep)
+            self.run("java -Djava.library.path=./bin "
+                        "-classpath bin/clsjJNI.jar:ConanLibTesterMain.jar main "
+                            "\"JNI jar call success from conan package\"")
