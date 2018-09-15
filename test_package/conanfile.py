@@ -9,17 +9,20 @@ class ClsjTestConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        # Current dir is "test_package/build/<build_id>" and CMakeLists.txt is
-        # in "test_package"
+        cmake.definitions["SWIG_JNI"] = "ON" if self.options["clsj"].swigJni else "OFF"
         cmake.configure()
         cmake.build()
 
     def imports(self):
-        self.copy("*.jar", dst="bin", src="lib")
-        self.copy('*.so*', dst='bin', src='lib')
+        self.copy("*.jar", dst="bin", src="bin")
+        self.copy('*.so*', dst='bin', src='bin')
 
     def test(self):
         if not tools.cross_building(self.settings):
-            self.run("java -Djava.library.path=./bin "
-                        "-classpath bin/clsjJNI.jar:ConanLibTesterMain.jar main "
-                            "\"JNI jar call success from conan package\"")
+            if self.options["clsj"].swigJni:
+                self.run("java -Djava.library.path=./bin "
+                            "-classpath bin/clsjJNI.jar:ConanLibTesterMain.jar main "
+                                "\"JNI jar call success from conan package\"")
+            else:
+                os.chdir("bin")
+                self.run(".%stestapp" % os.sep)
