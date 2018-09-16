@@ -8,13 +8,14 @@ class ClsjConan(ConanFile):
     url = "https://github.com/malwoden/clsj-conan"
     description = "clsj is a toy package for testing c++, swig, java and conan togther"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"swigJni": [True, False]}
-    default_options = "swigJni=True"
+    options = {"swigJni": [True, False],
+               "shared": [True, False]}
+    default_options = ("swigJni=True",
+                        "shared=False")
     generators = "cmake"
 
     def configure_cmake(self):
         cmake = CMake(self)
-        print("ON" if self.options.swigJni else "OFF")
         cmake.definitions["CLSJ_SWIG_JNI"] = "ON" if self.options.swigJni else "OFF"
         cmake.configure(source_folder="clsj_src")
         return cmake
@@ -32,8 +33,6 @@ class ClsjConan(ConanFile):
         cmake.install()
 
     def package_info(self):
-        if self.options["swigJni"]:
-            self.cpp_info.libs = ["clsjJNI.jar", "clsj_swiggy"]
-        else:
-            self.cpp_info.libs = ["clsj"]
-
+        self.cpp_info.libs = ["clsj"]
+        if self.options.swigJni:
+            self.cpp_info.libs.extend(["clsj_swiggy"])

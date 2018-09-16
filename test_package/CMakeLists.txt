@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8.12)
+
 project(PackageTest)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -15,7 +16,7 @@ if(SWIG_JNI)
         INCLUDE_JARS ${CONAN_BIN_DIRS_CLSJ}/clsjJNI.jar
         ENTRY_POINT main
     )
-else()
-    add_executable(testapp main.cpp)
-    target_link_libraries(testapp ${CONAN_LIBS})
 endif()
+
+add_executable(testapp main.cpp)
+target_link_libraries(testapp ${CONAN_LIBS})
